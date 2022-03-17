@@ -18,6 +18,13 @@
               mask="(##) #####-####"
               unmasked-value
           />
+          <q-input
+              label="Imagem do Paralax"
+              stack-label
+              v-model="paralax"
+              type="file"
+              accept="image/*"
+          />
 
           <div class="row justify-center q-gutter-md">
             <div>
@@ -52,15 +59,17 @@ export default defineComponent({
   name: 'PageMe',
   setup () {
     const table = 'config'
-    const { list, update } = useApi()
+    const { list, update, uploadImg } = useApi()
     const { notifyError, notifySuccess } = useNotify()
     const { setBrand } = useBrand()
     let config = {}
+    const paralax = ref([''])
     const form = ref({
       name: '',
       phone: '',
       primary: '',
-      secondary: ''
+      secondary: '',
+      paralax_url: ''
     })
 
     onMounted(() => {
@@ -69,6 +78,10 @@ export default defineComponent({
 
     const handleSubmit = async () => {
       try {
+        if (paralax.value.length > 0) {
+          const paralaxUrl = await uploadImg(paralax.value[0], 'paralax')
+          form.value.paralax_url = paralaxUrl
+        }
         console.log(form.value)
         await update(table, form.value)
         notifySuccess('Atualizado com sucesso')
@@ -89,7 +102,8 @@ export default defineComponent({
 
     return {
       handleSubmit,
-      form
+      form,
+      paralax
     }
   }
 })

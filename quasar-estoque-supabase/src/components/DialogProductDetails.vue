@@ -24,7 +24,7 @@
 
             <q-card-actions>
               <q-btn label="Cancel" color="primary" v-close-popup />
-              <q-btn label="Fazer Pedido" icon="mdi-whatsapp" color="green-7" @click="handleSendWpp" />
+              <q-btn label="Pedido por whatsapp" icon="mdi-whatsapp" color="green-7" @click="handleSendWpp" />
             </q-card-actions>
         </q-card>
     </q-dialog>
@@ -49,6 +49,7 @@ export default defineComponent({
   setup (props, { emit }) {
     const { brand } = UseApi()
     const msg = 'Olá, me interessei no produto: '
+
     const handleClose = () => {
       emit('hideDialog')
     }
@@ -57,6 +58,7 @@ export default defineComponent({
       const link = encodeURI(`https://api.whatsapp.com/send?phone=55${brand.value.phone}&text=${msg} - ${props.product.name} - no valor de ${formatCurrency(props.product.price)}`)
       openURL(link)
     }
+
     return {
       formatCurrency,
       handleClose,
